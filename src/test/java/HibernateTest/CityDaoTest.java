@@ -1,74 +1,39 @@
 package HibernateTest;
 
 import hibernate.configuration.HibernateConf;
-import hibernate.dao.CityDao;
-import hibernate.entity.City;
-import hibernate.entity.Country;
-import hibernate.entity.CountryLanguage;
+import hibernate.dao.UserDao;
+import hibernate.entity.User;
+import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Table;
 import java.util.List;
 
 public class CityDaoTest {
 
-
-    @Test
-    void readCityById(){
-        CityDao cityDao = new CityDao();
-        City cityById = cityDao.getCityById(3);
-
-        System.out.println(cityById.toString());
-
-    }
-
+    private Session session;
 
     @Test
     void saveTest(){
-        CityDao cityDao = new CityDao();
-        City city = new City();
-        city.setCountryCode("AAA");
-        city.setDistrict("Black Mesa");
-        city.setPopulation(12);
-        city.setName("City17");
-        city.setId(5001);
+        session = HibernateConf
+                .getSessionFactory()
+                .openSession();
+        User user = new User();
+        user.setName("Zbychu");
+        user.setLastName("Motyka");
+        user.setEmail("zbychu@gmail.com");
 
-        cityDao.save(city);
+        UserDao userDao = new UserDao();
+        long id = userDao.save(user);
+        userDao.close();
 
-    }
-    @Test
-    void updateTest(){
-        CityDao cityDao = new CityDao();
-        City city = cityDao.read(2);
-        city.setName("Swidnik-Hamburg");
+        User user1 = userDao.read(id);
 
-        cityDao.update(city);
+        System.out.println(user1.toString());
+
+        session.close();
         HibernateConf.shutdown();
 
-    }
-
-    @Test
-    void deleteByIdTest(){
-        CityDao cityDao = new CityDao();
-        cityDao.deleteById(2);
-        HibernateConf.shutdown();
-    }
-
-
-    @Test
-    void readCityByName(){
-        CityDao cityDao = new CityDao();
-        List<City> cityByName = cityDao.getCityByName("City17");
-        cityByName.forEach(System.out::println);
-    }
-
-    @Test
-    public void createsomething(){
-        EntityManager entityManager = HibernateConf.getSessionFactory().createEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(new CountryLanguage());
-        entityManager.persist(new City());
-        entityManager.persist(new Country());
-        entityManager.getTransaction().commit();
     }
 }
