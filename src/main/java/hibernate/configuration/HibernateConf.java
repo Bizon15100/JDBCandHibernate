@@ -1,8 +1,6 @@
 package hibernate.configuration;
 
-import hibernate.entity.Adress;
-import hibernate.entity.Phone;
-import hibernate.entity.User;
+import hibernate.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -18,6 +16,8 @@ public class HibernateConf {
             configuration.addAnnotatedClass(Adress.class);
             configuration.addAnnotatedClass(Phone.class);
             configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(Author.class);
+            configuration.addAnnotatedClass(Book.class);
         }
         return sessionFactory;
     }
